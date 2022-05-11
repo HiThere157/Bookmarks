@@ -12,7 +12,7 @@ type Bookmark = {
 async function fetchBookmarks(listName: string): Promise<Bookmark[]> {
   // const response = await fetch("test_data.json");
   listNameSpan.innerText = listName.toUpperCase();
-  const response = await fetch("http://localhost:8080/getBookmarks/" + listName);
+  const response = await fetch("https://bookmarks.itlab/getBookmarks/" + listName);
 
   if (response.status === 200) {
     const bookmarks = await response.json() as Bookmark[];
