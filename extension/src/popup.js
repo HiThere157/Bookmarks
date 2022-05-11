@@ -30,7 +30,7 @@ function renderBookmarks(bookmarks) {
         const bookmarkIcon = bookmarkElement.querySelector(".bookmark-icon");
         bookmarkLink.href = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
-        bookmarkIcon.src = bookmark.url + "/favicon.ico";
+        bookmarkIcon.src = "chrome://favicon/" + bookmark.url;
         bookmarksContainer.appendChild(bookmarkElement);
     });
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);

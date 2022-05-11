@@ -42,7 +42,7 @@ function renderBookmarks(bookmarks: Bookmark[]): void {
 
     bookmarkLink.href = bookmark.url;
     bookmarkTitle.innerText = bookmark.title;
-    bookmarkIcon.src = bookmark.url + "/favicon.ico";
+    bookmarkIcon.src = "chrome://favicon/" + bookmark.url;
 
     bookmarksContainer.appendChild(bookmarkElement);
   });
