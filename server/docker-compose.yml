@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    restart: on-failure:5
+    ports:
+      - 127.0.0.1:8004:80
+    volumes:
+      - ./src/:/app

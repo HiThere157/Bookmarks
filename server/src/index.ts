@@ -2,9 +2,8 @@ import express, { Express, Request, Response } from "express";
 import fs from "fs";
 
 const app: Express = express();
-const port = 8080;
+const port = 80;
 
-//configure cors
 app.use(function (req: Request, res: Response, next: () => void) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -13,7 +12,7 @@ app.use(function (req: Request, res: Response, next: () => void) {
 
 app.get("/getBookmarks/:listName", (req: Request, res: Response) => {
   const listName = req.params.listName;
-  //if file exists in the directory
+
   if (fs.existsSync(`./lists/${listName}.json`)) {
     const bookmarks = fs.readFileSync(`./lists/${listName}.json`, "utf8");
     return res.status(200).send(bookmarks);
