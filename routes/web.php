@@ -43,4 +43,6 @@ Route::get('/user/remove_permission/{id}', [SettingsController::class, 'remove_p
 
 Route::get('/logs', [LogController::class, 'index'])->middleware('auth')->name('logs');
 
-Route::get('/', [BookmarksController::class, 'index'])->name('home');
+Route::get('/bookmarks', [BookmarksController::class, 'index'])->middleware('auth')->name('bookmarks');
+Route::post('/bookmarks/create', [BookmarksController::class, 'create'])->middleware('auth')->name('bookmarks.create');
+Route::get('/bookmarks/delete/{id}', [BookmarksController::class, 'delete'])->middleware('auth')->name('bookmarks.delete');

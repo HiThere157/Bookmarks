@@ -15,7 +15,7 @@ class Bookmark extends Model
         'created_by_id'
     ];
 
-    public function addedBy()
+    public function created_by()
     {
         return $this->belongsTo(User::class, 'created_by_id');
     }
