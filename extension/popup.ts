@@ -10,9 +10,9 @@ type Bookmark = {
   url: string;
 }
 async function fetchBookmarks(listName: string): Promise<Bookmark[]> {
-  // const response = await fetch("test_data.json");
+  const response = await fetch("test_data.json");
   listNameSpan.innerText = listName.toUpperCase();
-  const response = await fetch("https://bookmarks.itlab/getBookmarks/" + listName);
+  // const response = await fetch("https://bookmarks.itlab/getBookmarks/" + listName);
 
   if (response.status === 200) {
     const bookmarks = await response.json() as Bookmark[];
@@ -42,7 +42,7 @@ function renderBookmarks(bookmarks: Bookmark[]): void {
 
     bookmarkLink.href = bookmark.url;
     bookmarkTitle.innerText = bookmark.title;
-    bookmarkIcon.src = "chrome://favicon/" + bookmark.url;
+    bookmarkIcon.src = "chrome://favicon/https://www.reddit.com";
 
     bookmarksContainer.appendChild(bookmarkElement);
   });

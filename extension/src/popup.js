@@ -5,9 +5,9 @@ const listNameSpan = document.getElementById("list-name");
 const searchInput = document.getElementById("search-input");
 const noResultsFound = document.getElementById("no-results");
 async function fetchBookmarks(listName) {
-    // const response = await fetch("test_data.json");
+    const response = await fetch("test_data.json");
     listNameSpan.innerText = listName.toUpperCase();
-    const response = await fetch("https://bookmarks.itlab/getBookmarks/" + listName);
+    // const response = await fetch("https://bookmarks.itlab/getBookmarks/" + listName);
     if (response.status === 200) {
         const bookmarks = await response.json();
         return bookmarks.sort((a, b) => {
@@ -30,7 +30,7 @@ function renderBookmarks(bookmarks) {
         const bookmarkIcon = bookmarkElement.querySelector(".bookmark-icon");
         bookmarkLink.href = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
-        bookmarkIcon.src = "chrome://favicon/" + bookmark.url;
+        bookmarkIcon.src = "chrome://favicon/https://www.reddit.com";
         bookmarksContainer.appendChild(bookmarkElement);
     });
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);

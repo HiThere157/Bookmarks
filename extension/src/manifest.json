@@ -3,7 +3,7 @@
   "name": "ITLAB Bookmarks",
   "description": "Show all important bookmarks in one place.",
   "version": "1.0",
-
+  
   "action": {
     "default_title": "ITLAB Bookmarks",
     "default_popup": "./popup.html"
