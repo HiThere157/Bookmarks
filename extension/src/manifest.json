@@ -1,11 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "ITLAB Bookmarks",
-  "description": "Show all important bookmarks in one place.",
-  "version": "1.0",
+  "name": "Bookmarks Client",
+  "description": "Use the Bookmarks Client to access your central bookmarks API from any device.",
+  "version": "1.1",
   
+  "permissions": [
+    "storage"
+  ],
+
   "action": {
-    "default_title": "ITLAB Bookmarks",
-    "default_popup": "./popup.html"
+    "default_title": "All Bookmarks",
+    "default_popup": "./popup/popup.html"
   }
 }

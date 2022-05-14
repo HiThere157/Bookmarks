@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bookmarks</title>
+  <meta charset="UTF-8">
+  <meta name="author" content="HiThere157">
+  <link href="popup.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+      <div id="title-container">
+        <span id="title">Bookmarks</span>
+        <button id="refresh-btn"></button>
+      </div>
+
+      <input id="search-input" type="search" placeholder="Search...">
+    </div>
+
+    <div id="no-results" class="bookmark hidden">
+      <span class="title">No results found!</span>
+    </div>
+
+    <div id="no-connection" class="bookmark hidden">
+      <span class="title error">Cannot connect to Bookmark API!</span>
+    </div>
+
+    <div id="content">
+      <!-- Bookmarks are inserted here -->
+    </div>
+
+    <div id="footer">
+      <span>v1.1</span>
+      <span id="list-name"></span>
+    </div>
+  </div>
+
+  <template id="bookmark-template">
+    <a class="bookmark" target="_blank">
+      <image class="icon"></image>
+      <span class="title"></span>
+    </a>
+  </template>
+  <template id="spinner-template">
+    <div class="lds-ellipsis-container">
+      <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </template>
+  <script src="popup.js"></script>
+</body>
+
+</html>

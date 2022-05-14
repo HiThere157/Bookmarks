@@ -56,9 +56,9 @@ function renderBookmarks(bookmarks) {
         const bookmarkLink = bookmarkElement.querySelector(".bookmark");
         const bookmarkTitle = bookmarkElement.querySelector(".title");
         const bookmarkIcon = bookmarkElement.querySelector(".icon");
-        // Set the bookmark's title and url.
         bookmarkLink.href = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
+        //TODO: Add icon
         bookmarkIcon.src = "chrome://favicon/https://www.reddit.com";
         bookmarksContainer.appendChild(bookmarkElement);
     });
@@ -66,7 +66,6 @@ function renderBookmarks(bookmarks) {
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);
 }
 async function init() {
-    // Show the spinner while the bookmarks are being fetched.
     bookmarksContainer.innerHTML = "";
     bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true));
     try {
@@ -82,8 +81,8 @@ async function init() {
         };
     }
     catch (error) {
+        console.log(error);
         console.error("Failed to fetch bookmarks");
-        // Show the no connection message if the API call fails.
         noConnection.classList.remove("hidden");
     }
 }
