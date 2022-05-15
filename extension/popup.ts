@@ -33,8 +33,10 @@ async function fetchBookmarksCache(): Promise<IBookmark[]> {
   return await fetchBookmarksApi();
 }
 
+// Clear the bookmarks cache.
 async function clearBookmarksCache(): Promise<void> {
   await chrome.storage.local.remove("bookmarks");
+  noConnection.classList.add("hidden");
   init();
 }
 
@@ -92,6 +94,11 @@ async function init() {
   bookmarksContainer.innerHTML = "";
   bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true) as HTMLDivElement);
 
+  // Clear the bookmarks cache and init the extension again.
+  refreshButton.onclick = () => {
+    clearBookmarksCache();
+  }
+
   try {
     const bookmarks = await fetchBookmarksCache();
     renderBookmarks(bookmarks);
@@ -101,14 +108,10 @@ async function init() {
       renderBookmarks(searchBookmarks(bookmarks, searchInput.value));
     }
 
-    // Clear the bookmarks cache and init the extension again.
-    refreshButton.onclick = () => {
-      clearBookmarksCache();
-    }
-
   } catch (error) {
     console.error("Failed to fetch bookmarks");
     // Show the no connection message if the API call fails.
+    bookmarksContainer.innerHTML = "";
     noConnection.classList.remove("hidden");
   }
 }

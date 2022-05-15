@@ -22,8 +22,10 @@ async function fetchBookmarksCache() {
     // If the bookmarks are not cached, await the API call and return the bookmarks.
     return await fetchBookmarksApi();
 }
+// Clear the bookmarks cache.
 async function clearBookmarksCache() {
     await chrome.storage.local.remove("bookmarks");
+    noConnection.classList.add("hidden");
     init();
 }
 // Fetches bookmarks from the extension's API and returns them as an array of objects.
@@ -56,9 +58,9 @@ function renderBookmarks(bookmarks) {
         const bookmarkLink = bookmarkElement.querySelector(".bookmark");
         const bookmarkTitle = bookmarkElement.querySelector(".title");
         const bookmarkIcon = bookmarkElement.querySelector(".icon");
+        // Set the bookmark's title and url.
         bookmarkLink.href = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
-        //TODO: Add icon
         bookmarkIcon.src = "chrome://favicon/https://www.reddit.com";
         bookmarksContainer.appendChild(bookmarkElement);
     });
@@ -66,8 +68,13 @@ function renderBookmarks(bookmarks) {
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);
 }
 async function init() {
+    // Show the spinner while the bookmarks are being fetched.
     bookmarksContainer.innerHTML = "";
     bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true));
+    // Clear the bookmarks cache and init the extension again.
+    refreshButton.onclick = () => {
+        clearBookmarksCache();
+    };
     try {
         const bookmarks = await fetchBookmarksCache();
         renderBookmarks(bookmarks);
@@ -75,14 +82,11 @@ async function init() {
         searchInput.oninput = () => {
             renderBookmarks(searchBookmarks(bookmarks, searchInput.value));
         };
-        // Clear the bookmarks cache and init the extension again.
-        refreshButton.onclick = () => {
-            clearBookmarksCache();
-        };
     }
     catch (error) {
-        console.log(error);
         console.error("Failed to fetch bookmarks");
+        // Show the no connection message if the API call fails.
+        bookmarksContainer.innerHTML = "";
         noConnection.classList.remove("hidden");
     }
 }
