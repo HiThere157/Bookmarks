@@ -11,7 +11,7 @@
 <body>
   <div id="container">
     <div id="header">
-      <div id="title-container">
+      <div id="title-container" class="container-fluid">
         <span id="title">Bookmarks</span>
         <button id="refresh-btn"></button>
       </div>
@@ -31,9 +31,12 @@
       <!-- Bookmarks are inserted here -->
     </div>
 
-    <div id="footer">
+    <div id="footer" class="container-fluid">
       <span>v1.1</span>
-      <span id="list-name"></span>
+      <div class="container-fluid">
+        <div id="connection-status" class="hidden"></div>
+        <span id="list-name"></span>
+      </div>
     </div>
   </div>
 

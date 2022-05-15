@@ -10,13 +10,28 @@ const searchInput = document.getElementById("search-input");
 const refreshButton = document.getElementById("refresh-btn");
 const noResultsFound = document.getElementById("no-results");
 const noConnection = document.getElementById("no-connection");
+const connectionStatus = document.getElementById("connection-status");
+function setConnectionStatus(isVisible, isError) {
+    if (isVisible) {
+        connectionStatus.classList.remove("hidden");
+    }
+    else {
+        connectionStatus.classList.add("hidden");
+    }
+    if (isError) {
+        connectionStatus.style.backgroundImage = "url(icons/alert-circle-outline.svg)";
+    }
+    else {
+        connectionStatus.style.backgroundImage = "url(icons/checkmark-circle-outline.svg)";
+    }
+}
 // Fetch bookmarks from the extension's API and return them as an array of objects.
 async function fetchBookmarksCache() {
     const bookmarks = await chrome.storage.local.get("bookmarks");
     // If the bookmarks are cached, return them.
     if (bookmarks.bookmarks) {
         // Run async function to fetch bookmarks from API to cache them for next time.
-        fetchBookmarksApi();
+        catchFetchBookmarksApi();
         return bookmarks.bookmarks;
     }
     // If the bookmarks are not cached, await the API call and return the bookmarks.
@@ -24,9 +39,20 @@ async function fetchBookmarksCache() {
 }
 // Clear the bookmarks cache.
 async function clearBookmarksCache() {
-    await chrome.storage.local.remove("bookmarks");
     noConnection.classList.add("hidden");
+    setConnectionStatus(false, false);
+    await chrome.storage.local.remove("bookmarks");
     init();
+}
+// Call bookmark API non blocking and catch errors to display the 'connection error' icon.
+async function catchFetchBookmarksApi() {
+    try {
+        await fetchBookmarksApi();
+        setConnectionStatus(true, false);
+    }
+    catch (error) {
+        setConnectionStatus(true, true);
+    }
 }
 // Fetches bookmarks from the extension's API and returns them as an array of objects.
 async function fetchBookmarksApi() {
@@ -39,6 +65,7 @@ async function fetchBookmarksApi() {
     const bookmarks = await response.json();
     // Cache the bookmarks for next time.
     chrome.storage.local.set({ "bookmarks": bookmarks });
+    setConnectionStatus(true, false);
     return bookmarks;
 }
 // Searches for bookmarks that match the search query and returns them as an new array of objects.
@@ -84,10 +111,9 @@ async function init() {
         };
     }
     catch (error) {
-        console.error("Failed to fetch bookmarks");
-        // Show the no connection message if the API call fails.
         bookmarksContainer.innerHTML = "";
         noConnection.classList.remove("hidden");
+        setConnectionStatus(true, true);
     }
 }
 window.onload = init;

@@ -9,14 +9,21 @@ body {
   font-family: sans-serif;
 }
 
+.container-fluid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
 #header {
   padding: .5rem;
 }
 
 #title-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: .5rem;
 }
 
@@ -43,11 +50,16 @@ body {
   overflow-y: auto;
 }
 
+#connection-status {
+  height: 1rem;
+  aspect-ratio: 1;
+  margin-right: .2rem;
+  background: no-repeat center url(icons/alert-circle-outline.svg);
+}
+
 #footer {
-  display: flex;
   padding: .1rem .5rem;
   font-size: small;
-  justify-content: space-between;
   background-color: #ececec;
 }
 
@@ -56,10 +68,6 @@ body {
   display: flex;
   padding: .75rem 1rem;
   align-items: center;
-}
-
-.hidden {
-  display: none;
 }
 
 .bookmark:link,
