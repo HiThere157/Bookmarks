@@ -11,18 +11,24 @@ const refreshButton = document.getElementById("refresh-btn");
 const noResultsFound = document.getElementById("no-results");
 const noConnection = document.getElementById("no-connection");
 const connectionStatus = document.getElementById("connection-status");
-function setConnectionStatus(isVisible, isError) {
-    if (isVisible) {
-        connectionStatus.classList.remove("hidden");
+// Set the connection status icon and visibility.
+var ConnectionStatus;
+(function (ConnectionStatus) {
+    ConnectionStatus[ConnectionStatus["Loading"] = 0] = "Loading";
+    ConnectionStatus[ConnectionStatus["Success"] = 1] = "Success";
+    ConnectionStatus[ConnectionStatus["Error"] = 2] = "Error";
+})(ConnectionStatus || (ConnectionStatus = {}));
+function setConnectionStatus(status) {
+    connectionStatus.classList.remove("spinning");
+    if (status === ConnectionStatus.Loading) {
+        connectionStatus.style.backgroundImage = "url(icons/sync-circle-outline.svg)";
+        connectionStatus.classList.add("spinning");
     }
-    else {
-        connectionStatus.classList.add("hidden");
-    }
-    if (isError) {
-        connectionStatus.style.backgroundImage = "url(icons/alert-circle-outline.svg)";
-    }
-    else {
+    else if (status === ConnectionStatus.Success) {
         connectionStatus.style.backgroundImage = "url(icons/checkmark-circle-outline.svg)";
+    }
+    else if (status === ConnectionStatus.Error) {
+        connectionStatus.style.backgroundImage = "url(icons/alert-circle-outline.svg)";
     }
 }
 // Fetch bookmarks from the extension's API and return them as an array of objects.
@@ -40,7 +46,6 @@ async function fetchBookmarksCache() {
 // Clear the bookmarks cache.
 async function clearBookmarksCache() {
     noConnection.classList.add("hidden");
-    setConnectionStatus(false, false);
     await chrome.storage.local.remove("bookmarks");
     init();
 }
@@ -48,10 +53,10 @@ async function clearBookmarksCache() {
 async function catchFetchBookmarksApi() {
     try {
         await fetchBookmarksApi();
-        setConnectionStatus(true, false);
+        setConnectionStatus(ConnectionStatus.Success);
     }
     catch (error) {
-        setConnectionStatus(true, true);
+        setConnectionStatus(ConnectionStatus.Error);
     }
 }
 // Fetches bookmarks from the extension's API and returns them as an array of objects.
@@ -65,7 +70,7 @@ async function fetchBookmarksApi() {
     const bookmarks = await response.json();
     // Cache the bookmarks for next time.
     chrome.storage.local.set({ "bookmarks": bookmarks });
-    setConnectionStatus(true, false);
+    setConnectionStatus(ConnectionStatus.Success);
     return bookmarks;
 }
 // Searches for bookmarks that match the search query and returns them as an new array of objects.
@@ -98,6 +103,8 @@ async function init() {
     // Show the spinner while the bookmarks are being fetched.
     bookmarksContainer.innerHTML = "";
     bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true));
+    // Show connection status loading icon while the bookmarks are being fetched.
+    setConnectionStatus(ConnectionStatus.Loading);
     // Clear the bookmarks cache and init the extension again.
     refreshButton.onclick = () => {
         clearBookmarksCache();
@@ -113,7 +120,7 @@ async function init() {
     catch (error) {
         bookmarksContainer.innerHTML = "";
         noConnection.classList.remove("hidden");
-        setConnectionStatus(true, true);
+        setConnectionStatus(ConnectionStatus.Error);
     }
 }
 window.onload = init;

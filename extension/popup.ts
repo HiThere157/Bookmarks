@@ -19,17 +19,24 @@ interface IBookmark {
   url: string;
 }
 
-function setConnectionStatus(isVisible: boolean, isError: boolean): void {
-  if (isVisible) {
-    connectionStatus.classList.remove("hidden");
-  } else {
-    connectionStatus.classList.add("hidden");
-  }
+// Set the connection status icon and visibility.
+enum ConnectionStatus {
+  Loading,
+  Success,
+  Error
+}
+function setConnectionStatus(status: ConnectionStatus): void {
+  connectionStatus.classList.remove("spinning");
 
-  if (isError) {
-    connectionStatus.style.backgroundImage = "url(icons/alert-circle-outline.svg)";
-  } else {
+  if (status === ConnectionStatus.Loading) {
+    connectionStatus.style.backgroundImage = "url(icons/sync-circle-outline.svg)";
+    connectionStatus.classList.add("spinning");
+
+  } else if (status === ConnectionStatus.Success) {
     connectionStatus.style.backgroundImage = "url(icons/checkmark-circle-outline.svg)";
+
+  } else if (status === ConnectionStatus.Error) {
+    connectionStatus.style.backgroundImage = "url(icons/alert-circle-outline.svg)";
   }
 }
 
@@ -51,8 +58,6 @@ async function fetchBookmarksCache(): Promise<IBookmark[]> {
 // Clear the bookmarks cache.
 async function clearBookmarksCache(): Promise<void> {
   noConnection.classList.add("hidden");
-  setConnectionStatus(false, false);
-
   await chrome.storage.local.remove("bookmarks");
   init();
 }
@@ -61,9 +66,9 @@ async function clearBookmarksCache(): Promise<void> {
 async function catchFetchBookmarksApi(): Promise<void> {
   try {
     await fetchBookmarksApi();
-    setConnectionStatus(true, false);
+    setConnectionStatus(ConnectionStatus.Success);
   } catch (error) {
-    setConnectionStatus(true, true);
+    setConnectionStatus(ConnectionStatus.Error);
   }
 }
 
@@ -79,8 +84,8 @@ async function fetchBookmarksApi(): Promise<IBookmark[]> {
 
   // Cache the bookmarks for next time.
   chrome.storage.local.set({ "bookmarks": bookmarks });
-  setConnectionStatus(true, false);
-  
+  setConnectionStatus(ConnectionStatus.Success);
+
   return bookmarks;
 }
 
@@ -123,6 +128,9 @@ async function init() {
   bookmarksContainer.innerHTML = "";
   bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true) as HTMLDivElement);
 
+  // Show connection status loading icon while the bookmarks are being fetched.
+  setConnectionStatus(ConnectionStatus.Loading);
+
   // Clear the bookmarks cache and init the extension again.
   refreshButton.onclick = () => {
     clearBookmarksCache();
@@ -140,7 +148,7 @@ async function init() {
   } catch (error) {
     bookmarksContainer.innerHTML = "";
     noConnection.classList.remove("hidden");
-    setConnectionStatus(true, true);
+    setConnectionStatus(ConnectionStatus.Error);
   }
 }
 

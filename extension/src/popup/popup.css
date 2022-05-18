@@ -96,7 +96,21 @@ body {
   color: #d31b1b
 }
 
-/* -- loading animation -- */
+/* -- loading animations -- */
+.spinning {
+  animation: spin 1.75s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .lds-ellipsis-container {
   display: flex;
   justify-content: center;
