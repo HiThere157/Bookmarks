@@ -1,7 +1,4 @@
-// Api URL for bookmarks
-const fetchApiUrl = "https://bookmarks.itlab/api/bookmarks";
-
-// static HTML elements
+// Static HTML elements
 const bookmarkTemplate = (document.getElementById("bookmark-template") as HTMLTemplateElement).content;
 const spinnerTemplate = (document.getElementById("spinner-template") as HTMLTemplateElement).content;
 
@@ -74,8 +71,9 @@ async function catchFetchBookmarksApi(): Promise<void> {
 
 // Fetches bookmarks from the extension's API and returns them as an array of objects.
 async function fetchBookmarksApi(): Promise<IBookmark[]> {
-  listNameSpan.innerText = fetchApiUrl.split("/")[2];
-  const response = await fetch(fetchApiUrl);
+  const fetchApiUrl = await chrome.storage.local.get("bookmarks_api_url");
+  listNameSpan.innerText = fetchApiUrl.bookmarks_api_url.split("/")[2];
+  const response = await fetch(fetchApiUrl.bookmarks_api_url);
 
   // If the API call fails, return an empty array.
   if (!response.ok) { return []; }
