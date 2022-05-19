@@ -72,7 +72,6 @@ class SettingsController extends Controller
             if($user){
                 Log::info('[SettingsController@promote] User ' . Auth::user()->username . ' promoted user ' . $user->username . ' to admin.');
                 $user->is_admin = true;
-                $user->can_sign = true;
                 $user->save();
             }
 
@@ -110,7 +109,7 @@ class SettingsController extends Controller
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@give_permission] User ' . Auth::user()->username . ' gave user ' . $user->username . ' the ability to create new Bookmarks.');
-                $user->can_sign = true;
+                $user->can_create = true;
                 $user->save();
             }
 
@@ -129,7 +128,7 @@ class SettingsController extends Controller
             $user = User::find($id);
             if($user){
                 Log::info('[SettingsController@remove_permission] User ' . Auth::user()->username . ' revoked user ' . $user->username . '\'s ability to create new Bookmarks.');
-                $user->can_sign = false;
+                $user->can_create = false;
                 $user->save();
             }
 
