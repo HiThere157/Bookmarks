@@ -47,6 +47,7 @@ body {
 
 #content {
   max-height: 20rem;
+  padding-top: .1rem;
   overflow-y: auto;
 }
 

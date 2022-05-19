@@ -11,5 +11,10 @@
   "action": {
     "default_title": "All Bookmarks",
     "default_popup": "./popup/popup.html"
+  },
+
+  "options_ui": {
+    "page": "./settings/settings.html",
+    "open_in_tab": false
   }
 }

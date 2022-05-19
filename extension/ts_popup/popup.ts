@@ -1,5 +1,5 @@
 // Api URL for bookmarks
-const fetchApiUrl = "http://localhost:8004/api/bookmarks";
+const fetchApiUrl = "https://bookmarks.itlab/api/bookmarks";
 
 // static HTML elements
 const bookmarkTemplate = (document.getElementById("bookmark-template") as HTMLTemplateElement).content;
@@ -114,7 +114,7 @@ function renderBookmarks(bookmarks: IBookmark[]): void {
     // Set the bookmark's title and url.
     bookmarkLink.href = bookmark.url;
     bookmarkTitle.innerText = bookmark.title;
-    bookmarkIcon.src = "chrome://favicon/https://www.reddit.com";
+    bookmarkIcon.src = "";
 
     bookmarksContainer.appendChild(bookmarkElement);
   });
