@@ -29,7 +29,7 @@
                         @if(Auth::user()->id != $user->id)
                             @if($user->deleted_at == null)
                             
-                                @if($user->can_sign == false)
+                                @if($user->can_create == false)
                                     <a class="btn btn-warning" href="{{ route('user.give_permission', $user->id) }}">Give Permission</a>
                                 @else
                                     <a class="btn btn-warning" href="{{ route('user.remove_permission', $user->id) }}">Remove Permission</a>
