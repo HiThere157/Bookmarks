@@ -6,24 +6,54 @@
   <meta charset="UTF-8">
   <meta name="author" content="HiThere157">
   <style>
-    #title {
-      font-size: xx-large;
+    code {
+      white-space: pre;
+      margin-top: .5rem;
+      font-size: large;
+    }
+
+    span {
+      font-size: large;
+      margin-top: .4rem;
+    }
+
+    .input-container {
+      width: 90%;
+      margin: .5rem 0;
     }
 
     #url-input {
-      width: 90%;
+      width: 100%;
       padding: .5rem;
+      font-size: large;
+    }
+
+    #save-settings-btn {
+      width: 50%;
+      margin-top: 1rem;
       font-size: large;
     }
   </style>
 </head>
 
 <body>
-  <span id="title">Bookmarks Settings</span>
+  <span style="font-size: xx-large;">Bookmarks Settings</span>
 
-  <input id="url-input" type="text" placeholder="https://...">
+  <div class="input-container">
+    <h2>Api Url:</h2>
+    <input id="url-input" type="text" placeholder="https://...">
+    <span style="display: block;">The response must be an array of objects implementing following interface:</span>
+    <code>
+      interface IBookmark {
+        title: string;
+        url: string;
+      }
+    </code>
+  </div>
+
+
   <button id="save-settings-btn">Save</button>
-
+  
   <script src="settings.js"></script>
 </body>
 
