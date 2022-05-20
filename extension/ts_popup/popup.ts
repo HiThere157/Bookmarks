@@ -63,7 +63,6 @@ async function clearBookmarksCache(): Promise<void> {
 async function catchFetchBookmarksApi(): Promise<void> {
   try {
     await fetchBookmarksApi();
-    setConnectionStatus(ConnectionStatus.Success);
   } catch (error) {
     setConnectionStatus(ConnectionStatus.Error);
   }

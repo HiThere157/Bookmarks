@@ -51,7 +51,6 @@ async function clearBookmarksCache() {
 async function catchFetchBookmarksApi() {
     try {
         await fetchBookmarksApi();
-        setConnectionStatus(ConnectionStatus.Success);
     }
     catch (error) {
         setConnectionStatus(ConnectionStatus.Error);
