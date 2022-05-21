@@ -5,55 +5,27 @@
   <title>Bookmark API Settings</title>
   <meta charset="UTF-8">
   <meta name="author" content="HiThere157">
-  <style>
-    code {
-      white-space: pre;
-      margin-top: .5rem;
-      font-size: large;
-    }
-
-    span {
-      font-size: large;
-      margin-top: .4rem;
-    }
-
-    .input-container {
-      width: 90%;
-      margin: .5rem 0;
-    }
-
-    #url-input {
-      width: 100%;
-      padding: .5rem;
-      font-size: large;
-    }
-
-    #save-settings-btn {
-      width: 50%;
-      margin-top: 1rem;
-      font-size: large;
-    }
-  </style>
+  <link href="settings.css" rel="stylesheet">
 </head>
 
 <body>
-  <span style="font-size: xx-large;">Bookmarks Settings</span>
-
-  <div class="input-container">
-    <h2>Api Url:</h2>
+  <div class="setting-container">
+    <h2 class="setting-title">Api Url:</h2>
     <input id="url-input" type="text" placeholder="https://...">
-    <span style="display: block;">The response must be an array of objects implementing following interface:</span>
-    <code>
-      interface IBookmark {
-        title: string;
-        url: string;
-      }
-    </code>
+    <div class="setting-description">
+      <span>The response must be an array of objects implementing following interface:</span>
+      <code>
+
+        interface <span class="more-red">IBookmark</span> {
+          title: <span class="red">string</span>;
+          url: <span class="red">string</span>;
+        }
+      </code>
+    </div>
   </div>
 
+  <button id="save-settings-btn" disabled>Save</button>
 
-  <button id="save-settings-btn">Save</button>
-  
   <script src="settings.js"></script>
 </body>
 

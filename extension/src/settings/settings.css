@@ -1,0 +1,55 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+code {
+  white-space: pre;
+  color: black !important;
+}
+
+code>.red {
+  color: #fa6767 !important;
+}
+
+code>.more-red {
+  color: #ef2424 !important;
+}
+
+input {
+  box-sizing: border-box;
+}
+
+.setting-container {
+  width: calc(100% - 1rem);
+  margin: .5rem;
+}
+
+.setting-title {
+  margin-bottom: .35rem;
+}
+
+.setting-description {
+  width: 100%;
+  margin: 1rem 0;
+  padding: 1rem;
+  color: #084298;
+  background-color: #cfe2ff;
+  border: thin solid #b6d4fe;
+  border-radius: .25rem;
+  box-sizing: border-box;
+  font-size: large;
+}
+
+#url-input {
+  width: 100%;
+  padding: .5rem;
+  font-size: large;
+}
+
+#save-settings-btn {
+  width: calc(100% - 2rem);
+  margin: 1rem;
+  font-size: large;
+}
