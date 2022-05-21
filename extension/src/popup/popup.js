@@ -53,6 +53,7 @@ async function catchFetchBookmarksApi() {
         await fetchBookmarksApi();
     }
     catch (error) {
+        console.error(error);
         setConnectionStatus(ConnectionStatus.Error);
     }
 }
@@ -60,7 +61,12 @@ async function catchFetchBookmarksApi() {
 async function fetchBookmarksApi() {
     const fetchApiUrl = await chrome.storage.local.get("bookmarks_api_url");
     listNameSpan.innerText = fetchApiUrl.bookmarks_api_url.split("/")[2];
-    const response = await fetch(fetchApiUrl.bookmarks_api_url);
+    const response = (await Promise.all([
+        fetch(fetchApiUrl.bookmarks_api_url),
+        // Add a minimum delay to ensure the spinner is visible before the bookmarks are fetched.
+        // It somehow feels better. Am I crazy? I don't know. ¯\_(ツ)_/¯
+        new Promise(resolve => setTimeout(resolve, 1000))
+    ]))[0];
     // If the API call fails, return an empty array.
     if (!response.ok) {
         return [];
@@ -116,6 +122,7 @@ async function init() {
         };
     }
     catch (error) {
+        console.error(error);
         bookmarksContainer.innerHTML = "";
         noConnection.classList.remove("hidden");
         setConnectionStatus(ConnectionStatus.Error);
