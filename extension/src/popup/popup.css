@@ -62,6 +62,7 @@ body {
   padding: .1rem .5rem;
   font-size: small;
   background-color: #ececec;
+  overflow: hidden;
 }
 
 /* -- bookmark styling -- */
