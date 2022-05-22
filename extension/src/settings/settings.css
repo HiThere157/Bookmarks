@@ -49,7 +49,7 @@ input {
 }
 
 #save-settings-btn {
-  width: calc(100% - 2rem);
-  margin: 1rem;
+  width: calc(100% - 1rem);
+  margin: 0 .5rem 1rem;
   font-size: large;
 }
