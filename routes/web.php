@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SessionController;
-use App\Http\Controllers\LogController;
 use App\Http\Controllers\SettingsController;
+
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\BookmarksController;
 
 /*
@@ -25,6 +27,8 @@ if(!empty($app_url)){
     $schema = explode(':', $app_url)[0];
     URL::forceScheme($schema);
 }
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/login', [SessionController::class, 'index'])->name('login');
 Route::post('/login', [SessionController::class, 'login']);

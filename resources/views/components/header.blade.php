@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Bookmarks</a>
+        <a class="navbar-brand" href="{{ route('home') }}">Bookmarks</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -8,11 +8,20 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">Overview</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ request()->is('bookmarks') ? 'active' : '' }}" href="{{ route('bookmarks') }}">Create</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
                 </li>
+
+                @if(!request()->is('/') && !request()->is('bookmarks') && !request()->is('logs'))
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">{{ str_replace('.', ' ', request()->route()->getName()) }}</a>
+                    </li>
+                @endif
 
             </ul>
             @auth
