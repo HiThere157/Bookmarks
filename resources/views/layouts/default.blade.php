@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Bookmarks</title>
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/jquery.tablesorter.min.css') }}">
         <script src="{{ asset('js/jquery.min.js') }}"></script>
