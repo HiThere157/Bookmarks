@@ -97,7 +97,7 @@ function renderBookmarks(bookmarks) {
         // Set the bookmark's title and url.
         bookmarkLink.href = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
-        bookmarkIcon.src = "";
+        bookmarkIcon.src = "chrome-extension://pmodocjkagpopnbgkcbeackdjkceoceo/_favicon?size=64&pageUrl=" + bookmark.url;
         bookmarksContainer.appendChild(bookmarkElement);
     });
     // Show the no results found message if there are no bookmarks to show.

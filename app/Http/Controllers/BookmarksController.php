@@ -66,4 +66,26 @@ class BookmarksController extends Controller
         return redirect()->route('bookmarks');
     }
 
+    //POST: edit a bookmark
+    public function edit(Request $request, $id)
+    {
+        if(!Gate::allows('can-create')) {
+            return back()->withErrors([
+                'error' => 'You are not allowed to edit Bookmarks. Contanct an admin to get access.'
+            ]);
+        }
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'url' => 'required|url|max:255'
+        ]);
+
+        $bookmark = Bookmark::find($id);
+        $bookmark->title = $request->title;
+        $bookmark->url = $request->url;
+        $bookmark->save();
+
+        Log::info('[BookmarksController@edit] User ' . Auth::user()->username . ' edited bookmark (id: ' . $bookmark->id . ').');
+        return redirect()->route('bookmarks');
+    }
 }

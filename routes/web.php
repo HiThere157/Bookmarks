@@ -50,3 +50,4 @@ Route::get('/logs', [LogController::class, 'index'])->middleware('auth')->name('
 Route::get('/bookmarks', [BookmarksController::class, 'index'])->middleware('auth')->name('bookmarks');
 Route::post('/bookmarks/create', [BookmarksController::class, 'create'])->middleware('auth')->name('bookmarks.create');
 Route::get('/bookmarks/delete/{id}', [BookmarksController::class, 'delete'])->middleware('auth')->name('bookmarks.delete');
+Route::post('/bookmarks/edit/{id}', [BookmarksController::class, 'edit'])->middleware('auth')->name('bookmarks.edit');
