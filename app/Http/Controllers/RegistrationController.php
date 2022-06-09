@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 use App\Models\User;
@@ -18,6 +19,12 @@ class RegistrationController extends Controller
     //POST: register a new user
     public function register(Request $request)
     {
+        if(env('LDAP_ENABLED') == 'true'){
+            return back()->withErrors([
+                'username' => 'LDAP Authentication is enabled. Please contact your administrator.',
+            ]);
+        }
+
         $this->validate($request, [
             'username' => 'required|string|min:6|max:255|unique:users',
             'email' => 'required|string|email|max:255',
@@ -28,9 +35,7 @@ class RegistrationController extends Controller
         $user = new User;
         $user->username = $request->input('username');
         $user->email = $request->input('email');
-        $user->password = bcrypt($request->input('password'));
-        $user->is_admin = false;
-        $user->can_create = false;
+        $user->password = Hash::make($request->input('password'));
         $user->save();
 
         auth()->login($user);

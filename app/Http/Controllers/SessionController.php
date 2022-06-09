@@ -25,16 +25,43 @@ class SessionController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        if(Auth::attempt($credentials, $request->has('stayLoggedIn'))) {
-            Log::info('[SessionController@login] User ' . Auth::user()->username . ' logged in.');
-            $request->session()->regenerate();
+        if(env('LDAP_ENABLED') == 'true'){
+            $ldap_connection = ldap_connect(env('LDAP_HOST'));
+            $success = @ldap_bind($ldap_connection, env('LDAP_DOMAIN') . '\\' . $request->input('username'), $request->input('password'));
 
-            $user = User::find(Auth::user()->id);
-            $user->last_login_at = now();
-            $user->save();
+            if($success){
+                $user = User::where('username', $request->input('username'))->first();
 
-            return redirect()->intended();
-        } 
+                if(!$user){
+                    $user = new User();
+                    $user->username = $request->input('username');
+                    $user->password = Hash::make($request->input('password'));
+                    $user->save();
+                }
+
+                Auth::login($user, $request->has('stayLoggedIn'));
+                Log::info('[SessionController@login] AD User ' . Auth::user()->username . ' logged in.');
+                $request->session()->regenerate();
+
+                $user->last_login_at = now();
+                $user->password = Hash::make($request->input('password'));
+                $user->save();
+
+                return redirect()->intended();
+            }
+
+        }else{
+            if(Auth::attempt($credentials, $request->has('stayLoggedIn'))) {
+                Log::info('[SessionController@login] User ' . Auth::user()->username . ' logged in.');
+                $request->session()->regenerate();
+    
+                $user = User::find(Auth::user()->id);
+                $user->last_login_at = now();
+                $user->save();
+    
+                return redirect()->intended();
+            }
+        }
 
         return back()->withErrors([
             'username' => 'The credentials you entered did not match our records. Please try again.',
