@@ -5,7 +5,7 @@
         <h1 class="mt-3">Overview</h1>
     </div>
 
-    <div class="container-fluid d-flex flex-wrap">
+    <div class="container-fluid d-flex flex-wrap justify-content-center">
         @foreach($bookmarks as $bookmark)
             <a class="d-flex justify-content-center align-items-center flex-column rounded shadow m-3 text-decoration-none" 
                 style="width: 15%; min-width: 15rem; aspect-ratio: 1.7" 
