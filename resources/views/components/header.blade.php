@@ -11,7 +11,7 @@
                     <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">Overview</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->is('bookmarks') ? 'active' : '' }}" href="{{ route('bookmarks') }}">Create</a>
+                    <a class="nav-link {{ request()->is('bookmarks') ? 'active' : '' }}" href="{{ route('bookmarks') }}">Edit</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('logs') ? 'active' : '' }}" href="{{ route('logs') }}">Logs</a>
