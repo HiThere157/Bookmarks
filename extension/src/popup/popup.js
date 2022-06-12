@@ -41,12 +41,6 @@ async function fetchBookmarksCache() {
     // If the bookmarks are not cached, await the API call and return the bookmarks.
     return await fetchBookmarksApi();
 }
-// Clear the bookmarks cache.
-async function clearBookmarksCache() {
-    noConnection.classList.add("hidden");
-    await chrome.storage.local.remove("bookmarks");
-    init();
-}
 // Call bookmark API non blocking and catch errors to display the 'connection error' icon.
 async function catchFetchBookmarksApi() {
     try {
@@ -69,13 +63,28 @@ async function fetchBookmarksApi() {
     ]))[0];
     // If the API call fails, return an empty array.
     if (!response.ok) {
-        return [];
+        throw new Error("API call failed");
     }
     const bookmarks = await response.json();
+    if (!checkResponse(bookmarks)) {
+        throw new Error("Invalid response");
+    }
     // Cache the bookmarks for next time.
     chrome.storage.local.set({ "bookmarks": bookmarks });
     setConnectionStatus(ConnectionStatus.Success);
     return bookmarks;
+}
+// Check response array for correct interface
+function checkResponse(response) {
+    if (!Array.isArray(response)) {
+        return false;
+    }
+    for (let i = 0; i < response.length; i++) {
+        if (typeof response[i].title !== "string" || typeof response[i].url !== "string") {
+            return false;
+        }
+    }
+    return true;
 }
 // Searches for bookmarks that match the search query and returns them as an new array of objects.
 function searchBookmarks(bookmarks, query) {
@@ -104,14 +113,19 @@ function renderBookmarks(bookmarks) {
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);
 }
 async function init() {
+    // Clear all errors and empty the search input.
+    noConnection.classList.add("hidden");
+    noResultsFound.classList.add("hidden");
+    searchInput.value = "";
     // Show the spinner while the bookmarks are being fetched.
     bookmarksContainer.innerHTML = "";
     bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true));
     // Show connection status loading icon while the bookmarks are being fetched.
     setConnectionStatus(ConnectionStatus.Loading);
     // Clear the bookmarks cache and init the extension again.
-    refreshButton.onclick = () => {
-        clearBookmarksCache();
+    refreshButton.onclick = async () => {
+        await chrome.storage.local.remove("bookmarks");
+        init();
     };
     try {
         const bookmarks = await fetchBookmarksCache();

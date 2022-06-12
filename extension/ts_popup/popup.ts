@@ -52,13 +52,6 @@ async function fetchBookmarksCache(): Promise<IBookmark[]> {
   return await fetchBookmarksApi();
 }
 
-// Clear the bookmarks cache.
-async function clearBookmarksCache(): Promise<void> {
-  noConnection.classList.add("hidden");
-  await chrome.storage.local.remove("bookmarks");
-  init();
-}
-
 // Call bookmark API non blocking and catch errors to display the 'connection error' icon.
 async function catchFetchBookmarksApi(): Promise<void> {
   try {
@@ -81,15 +74,32 @@ async function fetchBookmarksApi(): Promise<IBookmark[]> {
   ]))[0];
 
   // If the API call fails, return an empty array.
-  if (!response.ok) { return []; }
+  if (!response.ok) { throw new Error("API call failed"); }
 
   const bookmarks = await response.json() as IBookmark[];
+
+  if(!checkResponse(bookmarks)) { throw new Error("Invalid response"); }
 
   // Cache the bookmarks for next time.
   chrome.storage.local.set({ "bookmarks": bookmarks });
   setConnectionStatus(ConnectionStatus.Success);
 
   return bookmarks;
+}
+
+// Check response array for correct interface
+function checkResponse(response: IBookmark[]): boolean {
+  if(!Array.isArray(response)) {
+    return false;
+  }
+
+  for(let i = 0; i < response.length; i++) {
+    if (typeof response[i].title !== "string" || typeof response[i].url !== "string") {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 // Searches for bookmarks that match the search query and returns them as an new array of objects.
@@ -127,6 +137,11 @@ function renderBookmarks(bookmarks: IBookmark[]): void {
 }
 
 async function init() {
+  // Clear all errors and empty the search input.
+  noConnection.classList.add("hidden");
+  noResultsFound.classList.add("hidden");
+  searchInput.value = "";
+
   // Show the spinner while the bookmarks are being fetched.
   bookmarksContainer.innerHTML = "";
   bookmarksContainer.appendChild(spinnerTemplate.cloneNode(true) as HTMLDivElement);
@@ -135,8 +150,9 @@ async function init() {
   setConnectionStatus(ConnectionStatus.Loading);
 
   // Clear the bookmarks cache and init the extension again.
-  refreshButton.onclick = () => {
-    clearBookmarksCache();
+  refreshButton.onclick = async () => {
+    await chrome.storage.local.remove("bookmarks");
+    init();
   }
 
   try {
