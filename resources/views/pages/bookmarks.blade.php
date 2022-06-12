@@ -4,8 +4,9 @@
     <div class="d-flex justify-content-between align-items-center mx-5">
         <h1 class="mt-3">Saved Bookmarks</h1>
     </div>
-    <table class="table table-striped table-hover">
-        <thead>
+    <table class="table table-striped table-hover tablesorter">
+        <caption>List of Bookmarks</caption>    
+        <thead class="border-0">
             <tr>
                 <th style="width: 0;">Id</th>
                 <th>Title</th>
@@ -14,28 +15,27 @@
                 <th>Updated At</th>
                 <th style="width: 11rem;">Actions</th>
             </tr>
-        </thead>
-        <tbody>
 
             <form action="{{ route('bookmarks.create') }}" method="post">
                 @csrf
-                <tr>
+                <tr class="tablesorter-ignoreRow">
                     <td></td>
                     <td>
-                        <input type="text" class="form-control" name="title" spellcheck="false" />
+                        <input type="text" class="form-control" name="title" placeholder="Title..." spellcheck="false" />
                     </td>
                     <td>
-                        <input type="text" class="form-control" name="url" spellcheck="false" />
+                        <input type="text" class="form-control" name="url" placeholder="https://..." spellcheck="false" />
                     </td>
                     <td></td>
                     <td></td>
-                    <td class="text-end">
+                    <td class="text-end px-2">
                         <button type="submit" class="btn btn-primary">Create</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
+                        <button type="reset" class="btn btn-secondary">Clear</button>
                     </td>
                 </tr>
             </form>
-
+        </thead>
+        <tbody>
             @foreach($bookmarks as $bookmark)
                 <tr>
                     <td>{{ $bookmark->id }}</td>
@@ -57,6 +57,9 @@
 
     <script>
         $(document).ready(function() {
+            //apply table sorter
+            $(".table").tablesorter();
+
             //set confirm button to correct route
             $('[name="openDeleteModal"]').click(function() {
                 $('#deleteModalHeader').text('Delete Bookmark');
