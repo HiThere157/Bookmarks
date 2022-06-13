@@ -4,7 +4,7 @@ const spinnerTemplate = (document.getElementById("spinner-template") as HTMLTemp
 
 const bookmarksContainer = document.getElementById("content") as HTMLDivElement;
 
-const listNameSpan = document.getElementById("list-name") as HTMLSpanElement;
+const listName = document.getElementById("list-name") as HTMLSpanElement;
 const searchInput = document.getElementById("search-input") as HTMLInputElement;
 const refreshButton = document.getElementById("refresh-btn") as HTMLButtonElement;
 const noResultsFound = document.getElementById("no-results") as HTMLDivElement;
@@ -65,7 +65,7 @@ async function catchFetchBookmarksApi(): Promise<void> {
 // Fetches bookmarks from the extension's API and returns them as an array of objects.
 async function fetchBookmarksApi(): Promise<IBookmark[]> {
   const fetchApiUrl = await chrome.storage.local.get("bookmarks_api_url");
-  listNameSpan.innerText = fetchApiUrl.bookmarks_api_url.split("/")[2];
+  listName.innerText = fetchApiUrl.bookmarks_api_url.split("/")[2];
   const response = (await Promise.all([
     fetch(fetchApiUrl.bookmarks_api_url),
     // Add a minimum delay to ensure the spinner is visible before the bookmarks are fetched.
