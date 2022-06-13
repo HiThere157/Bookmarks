@@ -13,7 +13,7 @@
                 <th>URL</th>
                 <th>Created By</th>
                 <th>Updated At</th>
-                <th style="width: 11rem;">Actions</th>
+                <th class="sorter-false" style="width: 11rem;">Actions</th>
             </tr>
 
             <form action="{{ route('bookmarks.create') }}" method="post">
