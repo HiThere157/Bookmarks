@@ -2,7 +2,7 @@ version: "3.9"
 services:
   web:
     build: docker/
-    restart: on-failure:5
+    restart: always
     ports:
       - 8004:80
     volumes:
@@ -10,7 +10,7 @@ services:
 
   db:
     image: mysql
-    restart: on-failure:5
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
       MYSQL_DATABASE: "bookmarks"
