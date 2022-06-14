@@ -105,6 +105,7 @@ function renderBookmarks(bookmarks) {
         const bookmarkIcon = bookmarkElement.querySelector(".icon");
         // Set the bookmark's title and url.
         bookmarkLink.href = bookmark.url;
+        bookmarkLink.title = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
         bookmarkIcon.src = `chrome-extension://${chrome.runtime.id}/_favicon?size=64&pageUrl=${bookmark.url}`;
         bookmarksContainer.appendChild(bookmarkElement);
