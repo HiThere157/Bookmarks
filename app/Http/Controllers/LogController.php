@@ -28,42 +28,43 @@ class LogController extends Controller
         foreach ($files as $file) {
             foreach(explode("\n", file_get_contents($file)) as $log){
                 if(preg_match('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\].+:.+/', $log) == 1){
-                    $info = explode(': ' , substr($log, 28));
-                    $description = implode(': ', array_slice($info, 1));
+                    $log_infos = explode(': ' , $log);
+                    $log_type = explode('.', explode(' ', $log_infos[0])[2])[1];
+                    $log_description = implode(': ', array_slice($log_infos, 1));
+                    $log_time = substr($log, 1, 19);
 
                     //check for type
-                    if($type != null && strtolower($type) != strtolower($info[0])){
+                    if($type != null && strtolower($type) != strtolower($log_type)){
                         continue;
                     }
 
                     //check for query
-                    if($query != null && strpos(strtolower($description), strtolower($query)) === false){
+                    if($query != null && strpos(strtolower($log_description), strtolower($query)) === false){
                         continue;
                     }
 
                     //check for start and end time
                     if($start_time != null && $end_time != null){
-                        $time = substr($log, 1, 19);
-                        if($time < $start_time || $time > $end_time){
+                        if($log_time < $start_time || $log_time > $end_time){
                             continue;
                         }
                     }
 
-                    $description = explode("] ", $description);
-                    $controller = $description[0] . "]";
-                    $message = implode("] ", array_slice($description, 1));
+                    $log_description = explode("] ", $log_description);
+                    $log_controller = $log_description[0] . "]";
+                    $log_message = implode("] ", array_slice($log_description, 1));
 
                     //if no controller is found, undo split
-                    if(!preg_match('/\[\w+@\w+\]/', $controller) == 1){
-                        $message = $controller . " " . $message;
-                        $controller = "N/A";
+                    if(!preg_match('/\[\w+@\w+\]/', $log_controller) == 1){
+                        $log_message = $log_controller . " " . $log_message;
+                        $log_controller = "N/A";
                     }
 
                     $logs[] = [
-                        'time' => substr($log, 1, 19),
-                        'type' => $info[0],
-                        'controller' => $controller,
-                        'description' => $message
+                        'time' => $log_time,
+                        'type' => $log_type,
+                        'controller' => $log_controller,
+                        'description' => $log_message
                     ];
                 }
             }
