@@ -29,7 +29,4 @@ RUN a2enmod rewrite headers
 # Configure openLDAP
 COPY ldap/ldap.conf /etc/ldap/ldap.conf
 
-# Give permission to App Folder
-RUN chmod -R 777 /app
-
 CMD ["apachectl", "-D",  "FOREGROUND"]
