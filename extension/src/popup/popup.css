@@ -70,12 +70,7 @@ body {
   display: flex;
   padding: .75rem 1rem;
   align-items: center;
-}
-
-.bookmark:link,
-.bookmark:visited {
-  color: #000;
-  text-decoration: none;
+  cursor: pointer;
 }
 
 .bookmark:hover {

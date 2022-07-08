@@ -100,12 +100,12 @@ function renderBookmarks(bookmarks) {
     });
     sortedBookmarks.forEach((bookmark) => {
         const bookmarkElement = bookmarkTemplate.cloneNode(true);
-        const bookmarkLink = bookmarkElement.querySelector(".bookmark");
+        const bookmarkContainer = bookmarkElement.querySelector(".bookmark");
         const bookmarkTitle = bookmarkElement.querySelector(".title");
         const bookmarkIcon = bookmarkElement.querySelector(".icon");
         // Set the bookmark's title and url.
-        bookmarkLink.href = bookmark.url;
-        bookmarkLink.title = bookmark.url;
+        bookmarkContainer.setAttribute("data-url", bookmark.url);
+        bookmarkContainer.title = bookmark.url;
         bookmarkTitle.innerText = bookmark.title;
         bookmarkIcon.src = `chrome-extension://${chrome.runtime.id}/_favicon?size=64&pageUrl=${bookmark.url}`;
         bookmarksContainer.appendChild(bookmarkElement);
@@ -113,7 +113,14 @@ function renderBookmarks(bookmarks) {
     // Show the no results found message if there are no bookmarks to show.
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);
 }
+function onBookmarkClick(event) {
+    console.log(event);
+    const bookmark = event.target.closest(".bookmark");
+    const url = bookmark.getAttribute("data-url");
+    chrome.tabs.update({ url });
+}
 async function init() {
+    bookmarksContainer.onclick = onBookmarkClick;
     // Clear all errors and empty the search input.
     noConnection.classList.add("hidden");
     noResultsFound.classList.add("hidden");

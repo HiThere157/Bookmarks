@@ -120,13 +120,13 @@ function renderBookmarks(bookmarks: IBookmark[]): void {
   sortedBookmarks.forEach((bookmark) => {
     const bookmarkElement = bookmarkTemplate.cloneNode(true) as HTMLDivElement;
 
-    const bookmarkLink = bookmarkElement.querySelector(".bookmark") as HTMLAnchorElement;
+    const bookmarkContainer = bookmarkElement.querySelector(".bookmark") as HTMLDivElement;
     const bookmarkTitle = bookmarkElement.querySelector(".title") as HTMLSpanElement;
     const bookmarkIcon = bookmarkElement.querySelector(".icon") as HTMLImageElement;
 
     // Set the bookmark's title and url.
-    bookmarkLink.href = bookmark.url;
-    bookmarkLink.title = bookmark.url;
+    bookmarkContainer.setAttribute("data-url", bookmark.url);
+    bookmarkContainer.title = bookmark.url;
     bookmarkTitle.innerText = bookmark.title;
     bookmarkIcon.src = `chrome-extension://${chrome.runtime.id}/_favicon?size=64&pageUrl=${bookmark.url}`;
 
@@ -137,7 +137,16 @@ function renderBookmarks(bookmarks: IBookmark[]): void {
   noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);
 }
 
+function onBookmarkClick(event: MouseEvent): void {
+  const target = event.target as HTMLDivElement;
+  const bookmark = target.closest(".bookmark") as HTMLDivElement;
+  const url = bookmark.getAttribute("data-url") as string;
+  chrome.tabs.update({ url });
+}
+
 async function init() {
+  bookmarksContainer.onclick = onBookmarkClick;
+
   // Clear all errors and empty the search input.
   noConnection.classList.add("hidden");
   noResultsFound.classList.add("hidden");
