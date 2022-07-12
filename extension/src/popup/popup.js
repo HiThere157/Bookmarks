@@ -114,10 +114,11 @@ function renderBookmarks(bookmarks) {
     noResultsFound.classList.toggle("hidden", bookmarks.length !== 0);
 }
 function onBookmarkClick(event) {
-    console.log(event);
-    const bookmark = event.target.closest(".bookmark");
+    const target = event.target;
+    const bookmark = target.closest(".bookmark");
     const url = bookmark.getAttribute("data-url");
     chrome.tabs.update({ url });
+    window.close();
 }
 async function init() {
     bookmarksContainer.onclick = onBookmarkClick;

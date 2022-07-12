@@ -142,6 +142,7 @@ function onBookmarkClick(event: MouseEvent): void {
   const bookmark = target.closest(".bookmark") as HTMLDivElement;
   const url = bookmark.getAttribute("data-url") as string;
   chrome.tabs.update({ url });
+  window.close();
 }
 
 async function init() {
